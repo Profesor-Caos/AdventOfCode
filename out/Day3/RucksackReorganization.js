@@ -27,8 +27,8 @@ function partTwo(text) {
     for (let i = 0; i < lines.length; i += 3) {
         let elf2 = getElfAsSet(lines[i + 1]);
         let elf3 = getElfAsSet(lines[i + 2]);
-        elves = new Set(Array.from(lines[i]).filter(char => elf2.has(char)));
-        elves = new Set(Array.from(elves.values()).filter(char => elf3.has(char)));
+        elves = new Set(Array.from(lines[i]).filter(char => elf2.has(char))); // set of first elf's characters intersecting second elf's characters
+        elves = new Set(Array.from(elves.values()).filter(char => elf3.has(char))); // set of previous result intersecting third elf's characters
         sum += getLetterValue(Array.from(elves.values())[0]);
     }
     return sum;
