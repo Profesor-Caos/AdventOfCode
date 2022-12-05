@@ -1,5 +1,9 @@
 "use strict";
-const fs = require('fs');
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
 // fs.readFile('./src/Day1/input.txt', 'utf8', (err, data) => {
 //     if (err) {
 //         console.error(err);
@@ -7,7 +11,7 @@ const fs = require('fs');
 //       }
 //       console.log(data);
 // });
-fs.readFile('./src/Day1/input.txt', 'utf8', (err, data) => {
+fs_1.default.readFile('./src/Day1/input.txt', 'utf8', (err, data) => {
     if (err)
         throw err;
     else {
