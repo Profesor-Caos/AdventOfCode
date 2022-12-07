@@ -63,5 +63,4 @@ function partTwo(text) {
             count++;
     }
     return count;
-    return count;
 }

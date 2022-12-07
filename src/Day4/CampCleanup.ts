@@ -71,6 +71,4 @@ function partTwo(text: string): number {
     }
 
     return count;
-
-    return count;
 }
