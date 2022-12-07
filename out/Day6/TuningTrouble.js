@@ -16,9 +16,9 @@ fs_1.default.readFile('./src/Day6/input.txt', 'utf8', (err, data) => {
     }
 });
 function partOne(text, sequenceLength) {
-    for (let i = sequenceLength - 1; i < text.length; i++) {
-        if (isDistinctChars(text.substring(i - sequenceLength + 1, i + 1)))
-            return i + 1;
+    for (let i = sequenceLength; i < text.length; i++) {
+        if (isDistinctCharsLinearTime(text.substring(i - sequenceLength, i)))
+            return i;
     }
     return 0;
 }

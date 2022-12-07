@@ -18,9 +18,9 @@ fs.readFile('./src/Day6/input.txt', 'utf8', (err: any, data: any) => {
 });
 
 function partOne(text: string, sequenceLength: number): number {
-    for (let i = sequenceLength - 1; i < text.length; i++) {
-        if (isDistinctCharsLinearTime(text.substring(i - sequenceLength + 1, i + 1)))
-            return i + 1;
+    for (let i = sequenceLength; i < text.length; i++) {
+        if (isDistinctCharsLinearTime(text.substring(i - sequenceLength, i)))
+            return i;
     }
     return 0;
 }
