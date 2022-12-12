@@ -9,7 +9,7 @@ let test: string =
 
 console.log(partOne(test));
 console.log(partOneAttempt2(test));
-//console.log(partTwo(test));
+console.log(partTwo(test));
 
 
 fs.readFile('./src/Week2/Day8/input.txt', 'utf8', (err: any, data: any) => {
@@ -26,7 +26,7 @@ fs.readFile('./src/Week2/Day8/input.txt', 'utf8', (err: any, data: any) => {
         time = new Date().getTime() - time;
         console.log(time);
         console.log(time);
-        //console.log(partTwo(data));
+        console.log(partTwo(data));
     }
   
 });
@@ -114,6 +114,20 @@ function partOneAttempt2(text: string): number {
     return count;
 }
 
+function partTwo(text: string): number {
+    let max: number = 0;
+    let lines: string[] = text.split('\n');
+    let grid: number[][] = lines.map(row => row.trim().split("").map(c => parseInt(c)))
+    for (let x = 0; x < lines.length; x++) {
+        // console.log(`x:${x}`);
+        for (let y = 0; y < lines.length; y++) {
+            // console.log(`y:${y}`);
+            max = Math.max(max, scenicScore(grid, x, y));
+        }
+    }
+    return max;
+}
+
 function isTreeVisible(grid: number[][], x: number, y: number): boolean {
     let height: number = grid[x][y];
     let visible = true;
@@ -151,4 +165,47 @@ function isTreeVisible(grid: number[][], x: number, y: number): boolean {
         }
     }
     return visible;
+}
+
+function scenicScore(grid: number[][], x: number, y: number): number {
+    let height: number = grid[x][y];
+    let score = 1;
+    let treesSeen = 0;
+    for (let i = x-1; i >= 0; i--) {
+        treesSeen++;
+        if (grid[i][y] >= height) {
+            break;
+        }
+    }
+    score *= treesSeen;
+    if (score == 0)
+        return 0;
+    treesSeen = 0;
+    for (let i = x + 1; i < grid[0].length; i++) {
+        treesSeen++;
+        if (grid[i][y] >= height) {
+            break;
+        }
+    }
+    score *= treesSeen;
+    if (score == 0)
+        return 0;
+    treesSeen = 0;
+    for (let i = y-1; i >= 0; i--) {
+        treesSeen++;
+        if (grid[x][i] >= height) {
+            break;
+        }
+    }
+    score *= treesSeen;
+    if (score == 0)
+        return 0;
+    treesSeen = 0;
+    for (let i = y + 1; i < grid.length; i++) {
+        treesSeen++;
+        if (grid[x][i] >= height) {
+            break;
+        }
+    }
+    return score * treesSeen;
 }
