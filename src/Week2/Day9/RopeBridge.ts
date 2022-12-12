@@ -24,7 +24,7 @@ fs.readFile('./src/Week2/Day9/input.txt', 'utf8', (err: any, data: any) => {
         let time = new Date().getTime() - startTime;
         console.log(time);
         time = new Date().getTime();
-        // console.log(partTwo(data));
+        console.log(partTwo(data));
         time = new Date().getTime() - startTime;
         console.log(time);
     }
@@ -103,55 +103,51 @@ function partTwo(text: string): number {
             for (let k = 0; k < 10; k++) {
                 visit(positions, dir, k, visited);
             }
+            visited.add(`${positions[9][0]},${positions[9][1]}`)
         }
     }
     return visited.size;
 }
 
 function visit(positions: number[][], dir: string, i: number, visited: Set<string>): void {
-    let moved = false;
+    if (i == 0) {
+        if (dir == 'R')
+            positions[i][0]++;
+        else if (dir == 'L')
+            positions[i][0]--;
+        else if (dir == 'U')
+            positions[i][1]++;
+        else if (dir == 'D')
+            positions[i][1]--;
+        return;
+    }
+    // Otherwise, we need to look at i and i-1
     if (dir == 'R') {
-        if (positions[i+1][0] < positions[i][0])
+        if (Math.abs(positions[i-1][0] - positions[i][0]) > 1) // knot in front is too far to the right
         {
-            positions[i+1][0]++;
-            if (positions[i+1][1] != positions[i][1])
-            positions[i+1][1] = positions[i][1];
-            if (i == 8) // tail
-                visited.add(`${positions[i+1][0]},${positions[i+1][1]}`);
+            positions[i][0]++; // move to the right
+            positions[i][1] = positions[i-1][1]; // match the y position (moving diagonally if necessary)
         }
-        positions[i][0]++;
     }
     else if (dir == 'L') {
-        if (positions[i][0] > positions[i+1][0])
+        if (Math.abs(positions[i-1][0] - positions[i][0]) > 1) // same as above but Left
         {
-            positions[i+1][0]--;
-            if (positions[i+1][1] != positions[i][1])
-                positions[i+1][1] = positions[i][1];
-            if (i == 8) // tail
-                visited.add(`${positions[i+1][0]},${positions[i+1][1]}`);
+            positions[i][0]--;
+            positions[i][1] = positions[i-1][1];
         }
-        positions[i][0]--;
     }
     else if (dir == 'U') {
-        if (positions[i+1][1] < positions[i][1])
+        if (Math.abs(positions[i-1][1] - positions[i][1]) > 1) // knot in front is too far ahead vertically
         {
-            positions[i+1][1]++;
-            if (positions[i+1][0] != positions[i][0])
-                positions[i+1][0] = positions[i][0];
-            if (i == 8) // tail
-                visited.add(`${positions[i+1][0]},${positions[i+1][1]}`);
+            positions[i][1]++; // move up
+            positions[i][0] = positions[i-1][0]; // match the x position (moving diagonally if necessary)
         }
-        positions[i][1]++;
     }
-    else if (dir == 'D') {
-        if (positions[i+1][1] > positions[i][1])
+    else if (dir == 'D') { // same as above but Down
+        if (Math.abs(positions[i-1][1] - positions[i][1]) > 1)
         {
-            positions[i+1][1]--;
-            if (positions[i+1][0] != positions[i][0])
-                positions[i+1][0] = positions[i][0];
-            if (i == 8) // tail
-                visited.add(`${positions[i+1][0]},${positions[i+1][1]}`);
+            positions[i][1]--;
+            positions[i][0] = positions[i-1][0];
         }
-        positions[i][1]--;
     }
 }
