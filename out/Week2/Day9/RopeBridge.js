@@ -35,7 +35,7 @@ function partOne(text) {
     let [tx, ty] = [0, 0];
     visited.add(`${tx},${ty}`);
     for (let i = 0; i < lines.length; i++) {
-        let instruction = lines[i].split(' ');
+        let instruction = lines[i].trim().split(' ');
         let dir = instruction[0];
         let dist = parseInt(instruction[1]);
         for (let j = dist; j > 0; j--) {
