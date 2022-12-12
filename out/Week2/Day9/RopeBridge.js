@@ -93,14 +93,14 @@ function partTwo(text) {
         let dist = parseInt(instruction[1]);
         for (let j = 0; j < dist; j++) {
             for (let k = 0; k < 10; k++) {
-                visit(positions, dir, k, visited);
+                visit(positions, dir, k);
             }
             visited.add(`${positions[9][0]},${positions[9][1]}`);
         }
     }
     return visited.size;
 }
-function visit(positions, dir, i, visited) {
+function visit(positions, dir, i) {
     if (i == 0) {
         if (dir == 'R')
             positions[i][0]++;
@@ -112,32 +112,28 @@ function visit(positions, dir, i, visited) {
             positions[i][1]--;
         return;
     }
-    // Otherwise, we need to look at i and i-1
-    if (dir == 'R') {
-        if (Math.abs(positions[i - 1][0] - positions[i][0]) > 1) // knot in front is too far to the right
-         {
-            positions[i][0]++; // move to the right
+    if (Math.abs(positions[i - 1][0] - positions[i][0]) > 1) // knot in front is too far to side
+     {
+        setX(positions, i);
+        if (Math.abs(positions[i - 1][1] - positions[i][1]) > 1)
+            setY(positions, i);
+        else
             positions[i][1] = positions[i - 1][1]; // match the y position (moving diagonally if necessary)
-        }
     }
-    else if (dir == 'L') {
-        if (Math.abs(positions[i - 1][0] - positions[i][0]) > 1) // same as above but Left
-         {
-            positions[i][0]--;
-            positions[i][1] = positions[i - 1][1];
-        }
+    else if (Math.abs(positions[i - 1][1] - positions[i][1]) > 1) { // knot is too far away vertically
+        setY(positions, i);
+        positions[i][0] = positions[i - 1][0]; // match the x position (moving diagonally if necessary)
     }
-    else if (dir == 'U') {
-        if (Math.abs(positions[i - 1][1] - positions[i - 1][1]) > 1) // knot in front is too far ahead vertically
-         {
-            positions[i][1]++; // move up
-            positions[i][0] = positions[i - 1][0]; // match the x position (moving diagonally if necessary)
-        }
-    }
-    else if (dir == 'D') { // same as above but Down
-        if (Math.abs(positions[i - 1][1] - positions[i - 1][1]) > 1) {
-            positions[i][1]--;
-            positions[i][0] = positions[i - 1][0];
-        }
-    }
+}
+function setX(positions, i) {
+    if (positions[i - 1][0] > positions[i][0])
+        positions[i][0]++;
+    else
+        positions[i][0]--;
+}
+function setY(positions, i) {
+    if (positions[i - 1][1] > positions[i][1])
+        positions[i][1]++;
+    else
+        positions[i][1]--;
 }
