@@ -227,7 +227,7 @@ function partTwo(text: string): void {
             else
                 crtLine += '.';
             cycle++;
-            if (cycle % 40 === 0)
+            if ((cycle - 1) % 40 === 0)
             {
                 console.log(crtLine);
                 crtLine = '';
@@ -241,7 +241,7 @@ function partTwo(text: string): void {
             register += qty;
         }
         
-        if (cycle % 40 === 0)
+        if ((cycle - 1) % 40 === 0)
         {
             console.log(crtLine);
             crtLine = '';
