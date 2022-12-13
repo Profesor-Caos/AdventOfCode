@@ -11,7 +11,7 @@ accszExk
 acctuvwj
 abdefghi`;
 console.log(partOne(test));
-//console.log(partTwo(test));
+console.log(partTwo(test));
 fs_1.default.readFile('./src/Week2/Day12/input.txt', 'utf8', (err, data) => {
     if (err)
         throw err;
@@ -21,7 +21,7 @@ fs_1.default.readFile('./src/Week2/Day12/input.txt', 'utf8', (err, data) => {
         let time = new Date().getTime() - startTime;
         console.log(time);
         time = new Date().getTime();
-        //console.log(partTwo(data));
+        console.log(partTwo(data));
         time = new Date().getTime() - startTime;
         console.log(time);
     }

@@ -69,16 +69,22 @@ export class Path {
         if (this.grid.length <= x || x < 0 || this.grid[x].length <= y || y < 0)
             return false;
         let toHeight = this.grid[x][y];
-        if (toHeight === 'E'.charCodeAt(0)) // Capital E Ascii value signifying end - Nice
-            return height >= 'y'.charCodeAt(0);
-        if (toHeight - height > 1)
-            return false;
+        if (toHeight === this.goal) // Capital E Ascii value signifying end - Nice
+            return this.ascending ? height >= 'y'.charCodeAt(0) : height <= 'b'.charCodeAt(0);
+        if (this.ascending) {
+            if (toHeight - height > 1)
+                return false;
+        }
+        else {
+            if (height - toHeight > 1)
+                return false;
+        }
         return !this.hasVisited([x,y]);
     }
 
     public length(): number {
         if (this.parentPath == null)
-            return 0; // Don't count starting point in length.
+            return this.path.length - 1; // Don't count starting point in length.
         return this.path.length + this.parentPath.length();
     }
 
