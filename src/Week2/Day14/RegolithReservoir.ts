@@ -144,49 +144,113 @@ function parseString(text: string): [number, number][] {
     return result;
 }
 
-function compare(left: any[], right: any[]): boolean | null {
-    for (let i = 0; i < left.length; i++) {
-        let leftVal = left[i];
-        if (i >= right.length)
-            return false;
-        let rightVal = right[i];
-        if (Array.isArray(leftVal)) {
-            if (Array.isArray(rightVal)) {
-                let result = compare(leftVal, rightVal);
-                if (result != null)
-                    return result;
-            }
-            else {
-                let result = compare(leftVal, [rightVal]);
-                if (result != null)
-                    return result;
-            }
+// Too lazy to refactor into code that can be re-used for this part, so just pasting and modifying.
+function partTwo(text: string): number {
+    let lines: string[] = text.includes('\r\n') ? text.split('\r\n') :text.split('\n');
+    let vals: [number, number][][] = [];
+    let grid: number[][] = [];
+    // Scan once to parse input and figure out the bounds we need.
+    let [minX, maxX, maxY] = [Infinity, -Infinity, -Infinity];
+    for (let i = 0; i < lines.length; i++) {
+        let pairs = parseString(lines[i]);
+        vals[i] = pairs;
+        for (let j = 0; j < pairs.length; j++) {
+            let [x, y] = pairs[j];
+            if (x <= minX)
+                minX = x;
+            else if (x > maxX)
+                maxX = x;
+            if (y > maxY)
+                maxY = y;
         }
-        else {
-            if (Array.isArray(rightVal)) {
-                let result = compare([leftVal], rightVal);
-                if (result != null)
-                    return result;
+    }
+
+    // Below the maxY, we need another maxY two lower.
+    maxY += 2;
+
+    // Create an empty cavern
+    for (let i = 0; i <= 1000; i++) { // This time, make the bounds 0-1000 to simulate infinite floor
+        grid[i] = [];
+        for (let j = 0; j <= maxY; j++) {
+            grid[i][j] = j === maxY ? 1 : 0; // Bottom floor is all rock.
+        }
+    }
+
+    // Building cavern walls
+    for (let i = 0; i < vals.length; i++) {
+        let pairs = vals[i];
+        for (let j = 1; j < pairs.length; j++) {
+            let [x, y] = pairs[j - 1]; // This time around, bounds aren't supressed to the min and max Xs
+            let [endX, endY] = pairs[j];
+            if (endX < x) {
+                for (let k = endX; k <= x; k++) {
+                    grid[k][y] = 1;
+                }
+            }
+            else if (x < endX) {
+                for (let k = x; k <= endX; k++) {
+                    grid[k][y] = 1;
+                }
+            }
+            else if (endY < y) {
+                for (let k = endY; k <= y; k++) {
+                    grid[x][k] = 1;
+                }
             }
             else {
-                if (parseInt(leftVal) > parseInt(rightVal))
-                    return false;
-                else if (parseInt(leftVal) < parseInt(rightVal))
-                    return true;
+                for (let k = y; k <= endY; k++) {
+                    grid[x][k] = 1;
+                }
             }
         }
     }
-    if (left.length === right.length)
-        return null;
-    return true;
-}
 
-function partTwo(text: string): number {
-    let lines: string[] = text.includes('\r\n') ? text.split('\r\n') :text.split('\n');
-    let values: any[] = lines.filter(x => x.trim().length !== 0).map(x => parseString(x));
-    values = values.sort((a, b) => compare(a, b) ? -1 : 1);
-    let first = values.findIndex(x => (x.length === 1 && Array.isArray(x[0]) && x[0].length === 1 && x[0][0] === '2')) + 1;
-    let second = values.findIndex(x => (x.length === 1 && Array.isArray(x[0]) && x[0].length === 1 && x[0][0] === '6')) + 1;
-    
-    return first * second;
+    // Start sand falling
+    let [startX, startY] = [500, 0]
+    let onGrid = true;
+    let sandCount = 0;
+    while (onGrid) {
+        if (grid[startX][startY] === 2) { // Sand reached top
+            break;
+        }
+        let [currX, currY] = [startX, startY];
+        let falling = true;
+        while (falling) {
+            if (currY + 1 > maxY) {
+                falling = false;
+                onGrid = false;
+                break;
+            }
+            else if (grid[currX][currY + 1] == 0) { // keeps falling
+                currY++;
+                continue;
+            }
+            else { // hit something
+                if (currX === 0) { // falls off edge
+                    falling = false;
+                    onGrid = false;
+                    console.log("This shouldn't happen because of infinite floor.");
+                    break;
+                }
+                else if (grid[currX - 1][currY + 1] == 0) { // keeps falling left
+                    currX--;
+                    currY++;
+                    continue;
+                }
+                else if (grid[currX + 1][currY + 1] == 0) { // keeps falling right
+                    currX++
+                    currY++;
+                    continue;
+                }
+                else { // stuck on sand.
+                    grid[currX][currY] = 2; // mark sand with 2.
+                    falling = false;
+                    sandCount++;
+                    continue;
+                }
+            }
+        }
+    }
+
+    return sandCount;
 }
