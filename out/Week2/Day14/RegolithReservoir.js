@@ -79,7 +79,7 @@ function partOne(text) {
         }
     }
     // Start sand falling
-    let [startX, startY] = [500-minX, 0];
+    let [startX, startY] = [500 - minX, 0];
     let onGrid = true;
     let sandCount = 0;
     while (onGrid) {
@@ -91,7 +91,7 @@ function partOne(text) {
                 onGrid = false;
                 break;
             }
-            if (grid[currX][currY + 1] == 0) { // keeps falling
+            else if (grid[currX][currY + 1] == 0) { // keeps falling
                 currY++;
                 continue;
             }
@@ -101,17 +101,17 @@ function partOne(text) {
                     onGrid = false;
                     break;
                 }
-                if (grid[currX - 1][currY + 1] == 0) { // keeps falling left
+                else if (grid[currX - 1][currY + 1] == 0) { // keeps falling left
                     currX--;
                     currY++;
                     continue;
                 }
-                if (currX === maxX) { // falls off edge
+                else if (currX === maxX) { // falls off edge
                     falling = false;
                     onGrid = false;
                     break;
                 }
-                if (grid[currX + 1][currY + 1] == 0) { // keeps falling right
+                else if (grid[currX + 1][currY + 1] == 0) { // keeps falling right
                     currX++;
                     currY++;
                     continue;

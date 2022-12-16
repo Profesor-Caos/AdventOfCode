@@ -96,17 +96,11 @@ function partOne(text: string): number {
                 onGrid = false;
                 break;
             }
-            if (grid[currX][currY + 1] == 0) { // keeps falling
+            else if (grid[currX][currY + 1] == 0) { // keeps falling
                 currY++;
                 continue;
             }
-            else if (grid[currX][currY + 1] == 1) { // hit rock
-                grid[currX][currY] = 2; // mark sand with 2.
-                falling = false;
-                sandCount++;
-                continue;
-            }
-            else { // hit sand
+            else { // hit something
                 if (currX === 0) { // falls off edge
                     falling = false;
                     onGrid = false;
