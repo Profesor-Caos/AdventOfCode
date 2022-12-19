@@ -8,10 +8,6 @@ export class Sensor {
     // A sensor has a square area where beacons cannot exist.
     // The square has 4 lines, numbered 1-4 counterclockwise from the NE quadrant.
     // The intercepts are where these lines intercept the Y axis.
-    line1Intercept: number;
-    line2Intercept: number;
-    line3Intercept: number;
-    line4Intercept: number;
 
     constructor(text: string) {
         let words = text.split(' ');
@@ -25,10 +21,6 @@ export class Sensor {
         this.intercepts[1] = this.y + (this.x - this.distance);
         this.intercepts[2] = this.y - (this.x - this.distance);
         this.intercepts[3] = this.y + (this.x + this.distance);
-        this.line1Intercept = this.y - (this.x + this.distance);
-        this.line2Intercept = this.y + this.x - this.distance;
-        this.line3Intercept = this.y - (this.x - this.distance);
-        this.line4Intercept = this.y + this.x + this.distance;
     }
 
     findIntersections(other: Sensor): [number,number][] {
